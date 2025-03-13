@@ -1,12 +1,13 @@
 package jm.task.core.jdbc.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-@Table
+@Entity
+@Table(name = "Users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
     @Column
@@ -62,6 +63,6 @@ public class User {
 
     @Override
     public String toString() {
-        return super.toString();
+        return String.format("User{ id = %s, name = %s, lastName = %s, age = %s } ", id, name, lastName, age);
     }
 }

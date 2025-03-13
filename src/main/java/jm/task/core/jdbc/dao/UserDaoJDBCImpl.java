@@ -10,15 +10,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private static final String  SQL_CREATE_TABLE = """
-                    CREATE TABLE IF NOT EXISTS users
-                    (id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                    name VARCHAR(50) NOT NULL,
-                    lastName VARCHAR(50) NOT NULL,
-                    age INTEGER NOT NULL)
-                    """;
-    private static final String  SQL_DROP = "DROP TABLE users";
-
     private static final String  SQL_INSERT = "INSERT INTO users(name, lastName, age) VALUES (?,?,?)";
     private static final String  SQL_DELETE = "DELETE FROM users WHERE id = ?";
     private static final String  SQL_DELETE_ALL = "DELETE FROM users";
@@ -40,7 +31,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         try (Connection conn = Util.getConnection();
              Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate(SQL_DROP);
+            stmt.executeUpdate(SQL_DROP_TABLE);
         } catch (SQLSyntaxErrorException s) {
             //ничего не далаем если таблица не существует
         } catch (SQLException e) {
@@ -55,7 +46,7 @@ public class UserDaoJDBCImpl implements UserDao {
             stmt.setString(2,lastName);
             stmt.setByte(3,age);
             stmt.executeUpdate();
-            System.out.printf("User с именем — %s добавлен в базу данных\n", name);
+            printAddedUserName(name);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
